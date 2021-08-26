@@ -1,0 +1,2 @@
+div.my-class:
+    h1 "hello!"
