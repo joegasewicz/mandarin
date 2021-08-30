@@ -1,2 +1,2 @@
-div.my-class:
-    h1 "hello!"
+div:
+    "hello"
