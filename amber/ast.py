@@ -7,11 +7,24 @@ Node = namedtuple(
     ["elem_name", "value"],
     defaults=[None, None],
 )
-NodeLine = namedtuple(
-    "NodeLine",
-    ["index", "elem_line", "nodes", "child"],
-    defaults=[None, None, [], None],
-)
+
+
+class NodeLine:
+
+    def __init__(
+            self,
+            *,
+            index: int = None,
+            elem_line: str = None,
+            nodes: List = [],
+            child: Node = None,
+    ):
+        self.index = index
+        self.elem_line = elem_line
+        self.nodes = nodes
+        self.child = child
+
+
 SEPARATORS = (".", "#", " ")
 ELEMENTS = ("div", "h1")
 
@@ -22,10 +35,12 @@ class AST:
     """
     node_line_head: List[NodeLine]
 
+    tree: NodeLine
+
     def __init__(self, template: List[str]):
         self.template = template
 
-    def create_node(self, node_line: NodeLine):
+    def create_nodes(self, node_line: NodeLine):
         elem_line = ""
         if not node_line:
             pass
@@ -41,9 +56,9 @@ class AST:
                 # Must be a string value
                 n = Node(value=elem_line)
             node_line.nodes.append(n)
-            self.create_node(node_line.child)
+            self.create_nodes(node_line.child)
         elif node_line.child:
-            self.create_node(node_line.child)
+            self.create_nodes(node_line.child)
         else:
             pass
 
@@ -62,10 +77,11 @@ class AST:
         children: List[Node]
         # Create NodeLines
         i = 1
-        n = NodeLine(index=0)
-        self.create_node_line(n, self.template, i)
+        nl = NodeLine(index=0)
+        self.create_node_line(nl, self.template, i)
         # Process Lines into nodes
-        return n
+        self.create_nodes(nl)
+        return nl
 
     def walk(self):
         t = self.build_tree()

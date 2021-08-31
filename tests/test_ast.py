@@ -12,6 +12,18 @@ class TestAST:
 
         assert template == ["div:\n", '    "hello"\n']
 
+        ast = AST(template)
+        result = ast.build_tree()
+
+        expected = NodeLine(index=0, elem_line=None, nodes=[], child=NodeLine(
+            index=1, elem_line="div:\n", nodes=[Node(elem_name="div", value=None)], child=NodeLine(
+                index=2, elem_line='    "hello"\n', nodes=[Node(elem_name=None, value='    "hello"')], child=None),
+            ),
+        )
+
+        assert result == expected
+
+
     def test_create_nodes(self):
         core = Core(elements=ELEMENTS, template_path="templates")
         core.get_template("index.amber")
@@ -26,7 +38,7 @@ class TestAST:
         )
 
         ast = AST(template)
-        ast.create_node(nl)
+        ast.create_nodes(nl)
 
         expected = NodeLine(index=0, elem_line=None, nodes=[], child=NodeLine(
             index=1, elem_line="div:\n", nodes=[Node(elem_name="div", value=None)], child=NodeLine(
@@ -34,9 +46,6 @@ class TestAST:
             ),
         )
         assert nl == expected
-
-
-
 
     def test_create_node_line(self):
         core = Core(elements=ELEMENTS, template_path="templates")
@@ -55,4 +64,9 @@ class TestAST:
                 index=2, elem_line='    "hello"\n', nodes=[], child=None),
             ),
         )
-        assert expected == node_line
+        assert expected.index == node_line.index
+        assert expected.child.index == node_line.child.index
+        assert expected.child.child.index == node_line.child.child.index
+        assert not hasattr(node_line.child.child.index, "child")
+        assert expected.child.elem_line == node_line.child.elem_line
+        assert expected.child.child.elem_line == node_line.child.child.elem_line
