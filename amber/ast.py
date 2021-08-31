@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Union, Optional
 from collections import namedtuple
 
 
@@ -70,7 +70,7 @@ class AST:
             i += 1
             self.create_node_line(nl, template, i)
 
-    def build_tree(self):
+    def build_tree(self) -> NodeLine:
         elem_name: str
         value: str
         operator: str
@@ -81,8 +81,21 @@ class AST:
         self.create_node_line(nl, self.template, i)
         # Process Lines into nodes
         self.create_nodes(nl)
+        self.tree = nl
         return nl
 
     def walk(self):
         t = self.build_tree()
 
+    def visit_node_line(self, index: int) -> Optional[NodeLine]:
+        _node_line: Optional[NodeLine] = None
+        if index == 0:
+            return self.tree
+        for i in range(index):
+            if i == index:
+                break
+            elif _node_line:
+                _node_line = getattr(_node_line, "child", None)
+            else:
+                _node_line = getattr(self.tree, "child", None)
+        return _node_line
