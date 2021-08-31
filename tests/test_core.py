@@ -1,7 +1,7 @@
 import os
 
-from citrine.core import Core
-from citrine.elements import ELEMENTS
+from mandarin.core import Core
+from mandarin.elements import ELEMENTS
 
 
 class TestCore:

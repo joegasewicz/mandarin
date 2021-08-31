@@ -1,6 +1,6 @@
 from typing import Tuple, Union
 
-from citrine.ast import Node, ELEMENTS
+from mandarin.ast import Node, ELEMENTS
 
 
 class NodeHasNoValueError(Exception):

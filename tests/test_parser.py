@@ -1,5 +1,5 @@
-from citrine.parser import Parser
-from citrine.ast import Node
+from mandarin.parser import Parser
+from mandarin.ast import Node
 
 
 class TestParser:

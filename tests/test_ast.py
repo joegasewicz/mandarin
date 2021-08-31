@@ -1,6 +1,6 @@
-from citrine.core import Core
-from citrine.ast import AST, Node, NodeLine
-from citrine.elements import ELEMENTS
+from mandarin.core import Core
+from mandarin.ast import AST, Node, NodeLine
+from mandarin.elements import ELEMENTS
 
 
 class TestAST:

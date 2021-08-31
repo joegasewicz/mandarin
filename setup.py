@@ -7,8 +7,8 @@ setup(
     name="mandarin",
     version="0.0.1a1",
     description="Template engine for Python",
-    packages=["citrine"],
-    py_modules=["citrine"],
+    packages=["mandarin"],
+    py_modules=["mandarin"],
     install_requires=[
     ],
     classifiers=[
