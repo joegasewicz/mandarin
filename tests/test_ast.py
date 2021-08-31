@@ -1,6 +1,6 @@
-from amber.core import Core
-from amber.ast import AST, Node, NodeLine
-from amber.elements import ELEMENTS
+from citrine.core import Core
+from citrine.ast import AST, Node, NodeLine
+from citrine.elements import ELEMENTS
 
 
 class TestAST:

@@ -1,7 +1,7 @@
 import os
 
-from amber.core import Core
-from amber.elements import ELEMENTS
+from citrine.core import Core
+from citrine.elements import ELEMENTS
 
 
 class TestCore:

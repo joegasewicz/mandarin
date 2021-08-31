@@ -2,11 +2,7 @@ from typing import List, Dict, Union, Optional
 from collections import namedtuple
 
 
-Node = namedtuple(
-    "Node",
-    ["elem_name", "value"],
-    defaults=[None, None],
-)
+Node = namedtuple("Node", ["elem_name", "value"], defaults=[None, None])
 
 
 class NodeLine:

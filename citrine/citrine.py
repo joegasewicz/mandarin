@@ -1,0 +1,2 @@
+class Humite:
+    pass

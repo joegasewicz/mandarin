@@ -1,2 +1,0 @@
-class Amber:
-    pass

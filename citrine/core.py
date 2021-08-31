@@ -1,7 +1,7 @@
 import os
 from typing import List
 
-from amber.elements import ELEMENTS
+from citrine.elements import ELEMENTS
 
 
 TEMPLATE_PATH = "templates"
