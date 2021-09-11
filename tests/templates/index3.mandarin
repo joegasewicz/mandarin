@@ -1,0 +1,2 @@
+div(class="my-class" id="my-id"):
+    h1 "hello"

@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple, Union
 from mandarin.parser import Parser
 from mandarin.core import ELEMENTS
 
@@ -65,9 +65,11 @@ class AST:
                 elem_line, _ = node_line.elem_line.split(":\n")
             elif "\n" in node_line.elem_line:
                 elem_line, _ = node_line.elem_line.split("\n")
-            # Check is elem_line is an element or a string
-            if elem_line in ELEMENTS:
-                n = Node(elem_name=elem_line)
+            # Check is elem_line is an element or  a string
+            element_name = self._get_element_name(elem_line)
+            if element_name in ELEMENTS:
+                elem, elem_dict = self.parser.parse_elem(elem_line)
+                n = Node(elem_name=elem, attr=elem_dict)
             else:
                 # Must be a string value
                 n = Node(value=elem_line)
@@ -112,8 +114,18 @@ class AST:
             next_node_line = self.visit_node_line(2)
             for next_node in next_node_line.nodes:
                 if not next_node.elem_name:
-                    value = self.parser.parse(next_node)
-                    self.template_str += value
+                    # TODO parse the attrs here...
+                    next_elem_name, next_elem_val = self._get_element_name(next_node.value)
+                    next_node.elem_name = next_elem_name
+                    next_node.value = next_elem_val
+                    if next_elem_name in ELEMENTS:
+                        value = self.parser.parse(next_node)
+                    if isinstance(value, tuple):
+                        if len(value) == 3:
+                            for val in value:
+                                self.template_str += val
+                        else:
+                            self.template_str += value
             self.template_str += end
 
     def visit_node_line(self, index: int) -> Optional[NodeLine]:
@@ -128,3 +140,17 @@ class AST:
             else:
                 _node_line = getattr(self.tree, "child", None)
         return _node_line
+
+
+    def _safe_unpack(self):
+        pass
+
+    def _get_element_name(self, element_str) -> Union[str, Tuple[str, str]]:
+        if element_str in ELEMENTS:
+            return element_str
+        elif "(" in element_str:
+            return element_str.split("(")[0]
+        else:
+            # This is <element> + "<VALUE>"
+            element_name, element_val, _ = element_str.split('"')
+            return element_name.strip(), element_val

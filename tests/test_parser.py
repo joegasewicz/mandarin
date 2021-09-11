@@ -19,10 +19,13 @@ class TestParser:
         element = parser.parse(node)
         assert element == "hello!"
 
+        node = Node(elem_name="h1", value="     'hello!'")
+        element = parser.parse(node)
+        assert element == ("<h1>", "hello!", "</h1>")
+
         node = Node(elem_name="div", value=None, attr={"class": "my-class", "id": "my-id"})
         element = parser.parse(node)
         assert element == ("<div class='my-class' id='my-id'>", "</div>")
-
 
     def test_parse_elem(self):
         parser = Parser()
