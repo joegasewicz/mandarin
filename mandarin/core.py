@@ -1,10 +1,10 @@
 import os
 from typing import List
 
-from mandarin.elements import ELEMENTS
-
 
 TEMPLATE_PATH = "templates"
+SEPARATORS = (".", "#", " ")
+ELEMENTS = ("div", "h1")
 
 
 class Core:

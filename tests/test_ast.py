@@ -7,7 +7,7 @@ class TestAST:
 
     def test_build_tree(self):
         core = Core(elements=ELEMENTS, template_path="templates")
-        core.get_template("index.amber")
+        core.get_template("index.mandarin")
         template = core.template_list
 
         assert template == ["div:\n", '    "hello"\n']
@@ -30,7 +30,7 @@ class TestAST:
 
     def test_create_nodes(self):
         core = Core(elements=ELEMENTS, template_path="templates")
-        core.get_template("index.amber")
+        core.get_template("index.mandarin")
         template = core.template_list
 
         assert template == ["div:\n", '    "hello"\n']
@@ -59,7 +59,7 @@ class TestAST:
 
     def test_create_node_line(self):
         core = Core(elements=ELEMENTS, template_path="templates")
-        core.get_template("index.amber")
+        core.get_template("index.mandarin")
         template = core.template_list
 
         assert template == ["div:\n", '    "hello"\n']
@@ -84,7 +84,7 @@ class TestAST:
 
     def test_visit_node_line(self):
         core = Core(elements=ELEMENTS, template_path="templates")
-        core.get_template("index.amber")
+        core.get_template("index.mandarin")
         template = core.template_list
 
         assert template == ["div:\n", '    "hello"\n']
@@ -103,4 +103,16 @@ class TestAST:
 
         node_line = ast.visit_node_line(3)
         assert node_line is None
+
+    def test_walk(self):
+        core = Core(elements=ELEMENTS, template_path="templates")
+        core.get_template("index.mandarin")
+        template = core.template_list
+
+        assert template == ["div:\n", '    "hello"\n']
+
+        ast = AST(template)
+        ast.walk()
+        assert ast.template_str == "<div>hello</div>"
+
 

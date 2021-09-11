@@ -1,6 +1,6 @@
 from typing import Tuple, Union
 
-from mandarin.ast import Node, ELEMENTS
+from mandarin.core import ELEMENTS
 
 
 class NodeHasNoValueError(Exception):
@@ -12,7 +12,7 @@ class Parser:
     def __init__(self):
         pass
 
-    def parse(self, node: Node) -> Union[Tuple[str, str], str]:
+    def parse(self, node: "Node") -> Union[Tuple[str, str], str]:
         if node.elem_name:
             for el in ELEMENTS:
                 if el == node.elem_name:

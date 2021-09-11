@@ -1,6 +1,7 @@
 from typing import List, Dict, Union, Optional
 from collections import namedtuple
-
+from mandarin.parser import Parser
+from mandarin.core import ELEMENTS
 
 Node = namedtuple("Node", ["elem_name", "value"], defaults=[None, None])
 
@@ -13,16 +14,12 @@ class NodeLine:
             index: int = None,
             elem_line: str = None,
             nodes: List = [],
-            child: Node = None,
+            child: "NodeLine" = None,  # TODO correct type
     ):
         self.index = index
         self.elem_line = elem_line
         self.nodes = nodes
         self.child = child
-
-
-SEPARATORS = (".", "#", " ")
-ELEMENTS = ("div", "h1")
 
 
 class AST:
@@ -32,6 +29,18 @@ class AST:
     node_line_head: List[NodeLine]
 
     tree: NodeLine
+
+    parser = Parser()
+
+    _template_str: str = ""
+
+    @property
+    def template_str(self) -> str:
+        return self._template_str
+
+    @template_str.setter
+    def template_str(self, value: str):
+        self._template_str = value
 
     def __init__(self, template: List[str]):
         self.template = template
@@ -81,7 +90,16 @@ class AST:
         return nl
 
     def walk(self):
-        t = self.build_tree()
+        tree = self.build_tree()
+        for node in tree.child.nodes:
+            start, end = self.parser.parse(node)
+            self.template_str += start
+            next_node_line = self.visit_node_line(2)
+            for next_node in next_node_line.nodes:
+                if not next_node.elem_name:
+                    value = self.parser.parse(next_node)
+                    self.template_str += value
+            self.template_str += end
 
     def visit_node_line(self, index: int) -> Optional[NodeLine]:
         _node_line: Optional[NodeLine] = None
