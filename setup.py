@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mandarin",
-    version="0.0.1a1",
+    version="0.0.1a2",
     description="Template engine for Python",
     packages=["mandarin"],
     py_modules=["mandarin"],
