@@ -12,5 +12,5 @@ pip install mandarin==0.0.1a2
 div(class="my-class" id="my-id"):
     h1 "hello"
     
-# Output: "<div class='my-class' id='my-id'><h1>hello</h1></div>"
+# "<div class='my-class' id='my-id'><h1>hello</h1></div>"
 ```
