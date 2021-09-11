@@ -121,11 +121,10 @@ class AST:
                     if next_elem_name in ELEMENTS:
                         value = self.parser.parse(next_node)
                     if isinstance(value, tuple):
-                        if len(value) == 3:
-                            for val in value:
-                                self.template_str += val
-                        else:
-                            self.template_str += value
+                        for val in value:
+                            self.template_str += val
+                    else:
+                        self.template_str += value
             self.template_str += end
 
     def visit_node_line(self, index: int) -> Optional[NodeLine]:
