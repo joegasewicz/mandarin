@@ -28,6 +28,30 @@ class TestAST:
         assert expected.child.elem_line == node_line.child.elem_line
         assert expected.child.child.elem_line == node_line.child.child.elem_line
 
+    def test_build_tree2(self):
+        # Attributes #2 https://github.com/joegasewicz/mandarin/issues/2
+        core = Core(elements=ELEMENTS, template_path="templates")
+        core.get_template("index2.mandarin")
+        template = core.template_list
+
+        assert template == ['div(class="my-class", id="my-id"):\n', '    "hello"\n']
+
+        ast = AST(template)
+        node_line = ast.build_tree()
+
+        expected = NodeLine(index=0, elem_line=None, nodes=[], child=NodeLine(
+            index=1, elem_line='div(class="my-class", id="my-id"):\n', nodes=[Node(elem_name="div", value=None, attr={"class": "my-class"})], child=NodeLine(
+                index=2, elem_line='    "hello"\n', nodes=[Node(elem_name=None, value='    "hello"')], child=None),
+            ),
+        )
+
+        assert expected.index == node_line.index
+        assert expected.child.index == node_line.child.index
+        assert expected.child.child.index == node_line.child.child.index
+        assert not hasattr(node_line.child.child.index, "child")
+        assert expected.child.elem_line == node_line.child.elem_line
+        assert expected.child.child.elem_line == node_line.child.child.elem_line
+
     def test_create_nodes(self):
         core = Core(elements=ELEMENTS, template_path="templates")
         core.get_template("index.mandarin")
@@ -46,6 +70,35 @@ class TestAST:
 
         expected = NodeLine(index=0, elem_line=None, nodes=[], child=NodeLine(
             index=1, elem_line="div:\n", nodes=[Node(elem_name="div", value=None)], child=NodeLine(
+                index=2, elem_line='    "hello"\n', nodes=[Node(elem_name=None, value='    "hello"')], child=None),
+            ),
+        )
+
+        assert expected.index == node_line.index
+        assert expected.child.index == node_line.child.index
+        assert expected.child.child.index == node_line.child.child.index
+        assert not hasattr(node_line.child.child.index, "child")
+        assert expected.child.elem_line == node_line.child.elem_line
+        assert expected.child.child.elem_line == node_line.child.child.elem_line
+
+    def test_create_nodes2(self):
+        core = Core(elements=ELEMENTS, template_path="templates")
+        core.get_template("index2.mandarin")
+        template = core.template_list
+
+        assert template == ['div(class="my-class", id="my-id"):\n', '    "hello"\n']
+
+        node_line = NodeLine(index=0, elem_line=None, nodes=[], child=NodeLine(
+            index=1, elem_line='div(class="my-class", id="my-id"):\n', nodes=[], child=NodeLine(
+                index=2, elem_line='    "hello"\n', nodes=[], child=None),
+            ),
+        )
+
+        ast = AST(template)
+        ast.create_nodes(node_line)
+        node = Node(elem_name="div", value=None, attr={"class": "my-class", "id": "my-id"})
+        expected = NodeLine(index=0, elem_line=None, nodes=[], child=NodeLine(
+            index=1, elem_line='div(class="my-class", id="my-id"):\n', nodes=[node], child=NodeLine(
                 index=2, elem_line='    "hello"\n', nodes=[Node(elem_name=None, value='    "hello"')], child=None),
             ),
         )
@@ -114,3 +167,14 @@ class TestAST:
         ast = AST(template)
         ast.walk()
         assert ast.template_str == "<div>hello</div>"
+
+    def test_walk2(self):
+        core = Core(elements=ELEMENTS, template_path="templates")
+        core.get_template("index2.mandarin")
+        template = core.template_list
+
+        assert template == ['div(class="my-class", id="my-id"):\n', '    "hello"\n']
+
+        ast = AST(template)
+        ast.walk()
+        assert ast.template_str == "<div class='my-class' id='my-id'>hello</div>"

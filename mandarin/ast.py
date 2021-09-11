@@ -1,9 +1,20 @@
-from typing import List, Dict, Union, Optional
-from collections import namedtuple
+from typing import List, Dict, Optional
 from mandarin.parser import Parser
 from mandarin.core import ELEMENTS
 
-Node = namedtuple("Node", ["elem_name", "value"], defaults=[None, None])
+
+class Node:
+
+    def __init__(
+            self,
+            *,
+            elem_name: str = None,
+            value: str = None,
+            attr: Dict[str, str] = None,
+    ):
+        self.elem_name = elem_name
+        self.value = value
+        self.attr = attr
 
 
 class NodeLine:
@@ -67,7 +78,7 @@ class AST:
         else:
             pass
 
-    def create_node_line(self, parent_node: NodeLine, template, i: int):
+    def create_node_line(self, parent_node: NodeLine, template, i: int) -> None:
         if len(template):
             elem_line = template.pop(0)
             nl = NodeLine(index=i, elem_line=elem_line, nodes=[], child=None)
@@ -89,9 +100,13 @@ class AST:
         self.tree = nl
         return nl
 
-    def walk(self):
+    def walk(self) -> None:
         tree = self.build_tree()
         for node in tree.child.nodes:
+            if node.value:
+                elem_name, attr_dict = self.parser.parse_elem(node.value)
+                node.attr = attr_dict
+                node.elem_name = elem_name
             start, end = self.parser.parse(node)
             self.template_str += start
             next_node_line = self.visit_node_line(2)
