@@ -114,5 +114,3 @@ class TestAST:
         ast = AST(template)
         ast.walk()
         assert ast.template_str == "<div>hello</div>"
-
-

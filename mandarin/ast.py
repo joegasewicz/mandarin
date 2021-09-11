@@ -14,7 +14,7 @@ class NodeLine:
             index: int = None,
             elem_line: str = None,
             nodes: List = [],
-            child: "NodeLine" = None,  # TODO correct type
+            child: "NodeLine" = None,
     ):
         self.index = index
         self.elem_line = elem_line
