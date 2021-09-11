@@ -114,7 +114,6 @@ class AST:
             next_node_line = self.visit_node_line(2)
             for next_node in next_node_line.nodes:
                 if not next_node.elem_name:
-                    # TODO parse the attrs here...
                     next_elem_name, next_elem_val = self._get_element_name(next_node.value)
                     next_node.elem_name = next_elem_name
                     next_node.value = next_elem_val
